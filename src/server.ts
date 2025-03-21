@@ -8,12 +8,12 @@ import { example } from "./router";
 dotenv.config();
 
 const app = express();
-const { port, env } = getConfig();
+const { port } = getConfig();
 
 // Middlewares
 app.use(cors());
 app.use(express.json());
-app.use((req, res, next) => {
+app.use((_req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "*");
   res.header("Access-Control-Allow-Methods", "*");
