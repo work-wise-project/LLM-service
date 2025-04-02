@@ -1,12 +1,12 @@
-import { config as configDotenv } from "dotenv";
+import { config as configDotenv } from 'dotenv';
 
 type Config = {
-  env: "development" | "production";
+  env: 'development' | 'production';
   port: number;
   chatGPTApiKey: string;
 };
 
-const REQUIRED_ENVIRONMENT_VARIABLES = ["CHAT_GPT_API_KEY"];
+const REQUIRED_ENVIRONMENT_VARIABLES = ['CHAT_GPT_API_KEY'];
 
 const checkEnvironmentVariables = () => {
   if (
@@ -31,8 +31,8 @@ export const getConfig = () => {
     const { env } = process as { env: Record<string, string> };
 
     config = {
-      env: env.NODE_ENV === "production" ? env.NODE_ENV : "development",
-      port: Number(env.PORT) || 3000,
+      env: env.NODE_ENV === 'production' ? env.NODE_ENV : 'development',
+      port: Number(env.PORT) || 4002,
       chatGPTApiKey: env.CHAT_GPT_API_KEY,
     };
   }
