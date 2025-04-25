@@ -23,7 +23,7 @@ app.use((_req, res, next) => {
 // Routes
 app.use('/example', example);
 app.use('/resume', resume);
-app.use('/interview', createInterviewRouter());
+app.use('/interviews', createInterviewRouter());
 
 app.use(errorHandler);
 

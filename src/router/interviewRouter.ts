@@ -11,10 +11,7 @@ export const createInterviewRouter = () => {
             return;
         }
 
-        const analysis = await getVertexAIClient().analyzeInterview(transcript);
-        // TODO: save analysis to database
-
-        res.status(200).send({ analysis });
+        res.status(200).send({ analysis: await getVertexAIClient().analyzeInterview(transcript) });
     });
 
     return router;
