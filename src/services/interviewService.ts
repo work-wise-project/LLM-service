@@ -3,7 +3,7 @@ import { ApiError } from '../errors/ApiError';
 import { sendMessageToGPT } from '../chatGPT/integration';
 import prompts from '../chatGPT/prompts';
 
-export const generateInterviewPreparation = async (jobLink: string, resumeText: string) => {
+export const generateInterviewPreparation = async (jobLink: string) => {
     try {
         if (!jobLink) {
             throw new ApiError({
@@ -13,9 +13,8 @@ export const generateInterviewPreparation = async (jobLink: string, resumeText: 
         }
 
         const result = await sendMessageToGPT({ prompt: prompts.InterviewPreparationPrompt(jobLink) });
-        console.log('Interview preparation result:', result);
-
-        return result;
+        console.log('Interview preparation result:', result.choices[0].message.content);
+        return result.choices[0].message.content;
     } catch (error) {
         console.error('Error generating interview preparation:', error);
         if (error instanceof ApiError) {

@@ -16,7 +16,7 @@ export const createInterviewRouter = () => {
         res.status(200).send({ analysis: await getVertexAIClient().analyzeInterview(transcript) });
     });
 
-    router.post('/preparation', asyncHandler(prepareInterview));
+    router.post('/preparation', prepareInterview);
 
     return router;
 };
