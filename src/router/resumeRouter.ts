@@ -1,14 +1,10 @@
 import { Router } from 'express';
-import {
-  processResume,
-  processAnalyzeResume,
-  processCheckGrammar,
-} from '../contorllers/resumeController';
+import { processResume, processAnalyzeResume, processCheckGrammar } from '../controllers/resumeController';
 
 export const resume = Router();
 
 resume.get('/', async (req, res) => {
-  res.status(200).send('Hello World from resume router');
+    res.status(200).send('Hello World from resume router');
 });
 
 resume.post('/process-resume', processResume);

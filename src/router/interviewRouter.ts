@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { getVertexAIClient } from '../vertexAI';
+import { prepareInterview } from '../controllers/interviewController';
+import { asyncHandler } from '../errors/asyncHandler';
 
 export const createInterviewRouter = () => {
     const router = Router();
@@ -13,6 +15,8 @@ export const createInterviewRouter = () => {
 
         res.status(200).send({ analysis: await getVertexAIClient().analyzeInterview(transcript) });
     });
+
+    router.post('/preparation', prepareInterview);
 
     return router;
 };

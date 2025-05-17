@@ -23,7 +23,29 @@ ${resumeText}
 """
 `;
 
+const InterviewPreparationPrompt = (jobLink: string) => `
+ You are an expert career coach helping prepare a candidate for an interview.
+
+Please analyze the following job description and provide:
+1. A concise description of the company (100 words max)
+2. A clear summary of the role and its responsibilities (150 words max)
+3. A list of potential interview questions (5 questions max) that the candidate should prepare for, based on the job description.
+
+Job link:
+${jobLink}
+
+Format your response as a JSON object with the following structure:
+{
+  "company_info": "Your description of the company here...",
+  "job_info": "Your description of the role here..."
+  "interview_questions": ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"],
+}
+
+Respond with ONLY the raw JSON. Do not include any explanation, backticks, or formatting — just the JSON object.
+`;
+
 export default {
-  AnalyzeResumePrompt,
-  GrammarCheckPrompt,
+    AnalyzeResumePrompt,
+    GrammarCheckPrompt,
+    InterviewPreparationPrompt,
 };
