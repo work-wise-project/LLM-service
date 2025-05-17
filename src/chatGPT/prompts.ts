@@ -36,9 +36,9 @@ ${jobLink}
 
 Format your response as a JSON object with the following structure:
 {
-  "company_description": "Your description of the company here...",
-  "role_description": "Your description of the role here..."
-  "material_links": ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"],
+  "company_info": "Your description of the company here...",
+  "job_info": "Your description of the role here..."
+  "interview_questions": ["Question 1", "Question 2", "Question 3", "Question 4", "Question 5"],
 }
 
 Respond with ONLY the raw JSON. Do not include any explanation, backticks, or formatting — just the JSON object.
