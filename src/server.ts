@@ -1,6 +1,7 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
+import { createServer as createHttpsServer } from 'https';
 import { getConfig } from './config/config';
 import { errorHandler } from './middlewares';
 import { createInterviewRouter, example, resume } from './router';
@@ -8,7 +9,7 @@ import { createInterviewRouter, example, resume } from './router';
 dotenv.config();
 
 const app = express();
-const { port } = getConfig();
+const { port, isProductionEnv, httpsCert, httpsKey } = getConfig();
 
 // Middlewares
 app.use(cors());
@@ -27,6 +28,7 @@ app.use('/interviews', createInterviewRouter());
 
 app.use(errorHandler);
 
-app.listen(port, () => {
-    console.log(`🚀 Server running on http://localhost:${port}`);
+const serverToRun = isProductionEnv ? createHttpsServer({ key: httpsKey, cert: httpsCert }, app) : app;
+serverToRun.listen(port, () => {
+    console.log(`listening on port ${port} (${isProductionEnv ? 'https' : 'http'})`);
 });
