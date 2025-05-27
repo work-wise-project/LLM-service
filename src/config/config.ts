@@ -6,11 +6,19 @@ type Config = {
     chatGPTApiKey: string;
     googleProjectId: string;
     googleCloudKey: string;
+    googleApiKey: string;
+    googleSearchCX: string;
     httpsKey: string;
     httpsCert: string;
 };
 
-const REQUIRED_ENVIRONMENT_VARIABLES = ['CHAT_GPT_API_KEY', 'GOOGLE_PROJECT_ID', 'GOOGLE_CLOUD_KEY'];
+const REQUIRED_ENVIRONMENT_VARIABLES = [
+    'CHAT_GPT_API_KEY',
+    'GOOGLE_PROJECT_ID',
+    'GOOGLE_CLOUD_KEY',
+    'GOOGLE_SEARCH_CX',
+    'GOOGLE_API_KEY',
+];
 
 const checkEnvironmentVariables = (requiredEnvironmentVariables: string[]) => {
     if (requiredEnvironmentVariables.some((variable) => !(variable in process.env))) {
@@ -39,6 +47,8 @@ export const getConfig = () => {
             chatGPTApiKey: env.CHAT_GPT_API_KEY,
             googleProjectId: env.GOOGLE_PROJECT_ID,
             googleCloudKey: env.GOOGLE_CLOUD_KEY,
+            googleSearchCX: env.GOOGLE_SEARCH_CX,
+            googleApiKey: env.GOOGLE_API_KEY,
             httpsKey: env.HTTPS_KEY || '',
             httpsCert: env.HTTPS_CERT || '',
         };

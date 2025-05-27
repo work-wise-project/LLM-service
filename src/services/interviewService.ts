@@ -1,20 +1,44 @@
 import { getVertexAIClient } from '../vertexAI';
 import { ApiError } from '../errors/ApiError';
-import { sendMessageToGPT } from '../chatGPT/integration';
-import prompts from '../chatGPT/prompts';
+import prompts from '../vertexAI/prompts';
+import { InterviewPreparation } from '../types/preperation';
+import { googleSearch } from '../googleSearch';
 
-export const generateInterviewPreparation = async (jobLink: string) => {
+export const generateInterviewPreparation = async (preperationData: InterviewPreparation) => {
     try {
-        if (!jobLink) {
+        if (!preperationData.jobLink) {
             throw new ApiError({
                 message: 'Job link is required',
                 status: 400,
             });
         }
 
-        const result = await sendMessageToGPT({ prompt: prompts.InterviewPreparationPrompt(jobLink) });
-        console.log('Interview preparation result:', result.choices[0].message.content);
-        return result.choices[0].message.content;
+        const searchPromptResult = await getVertexAIClient().sendMessageToGPT({
+            message: prompts.SearchQueryPrompt(preperationData),
+        });
+
+        const searchQueries = JSON.parse(searchPromptResult);
+
+        let counter = 1;
+        const links = [];
+
+        for (const query of searchQueries) {
+            if (counter > 5) {
+                break;
+            }
+            links.push(...(await googleSearch(query)));
+            counter++;
+        }
+
+        const result = await getVertexAIClient().sendMessageToGPT({
+            message: prompts.InterviewPreparationPrompt({
+                ...preperationData,
+                listOfLinksWithTitlesAndSnippets: links,
+            }),
+            systemInstruction: 'You are an expert career coach helping prepare a candidate for an interview.',
+        });
+
+        return result;
     } catch (error) {
         console.error('Error generating interview preparation:', error);
         if (error instanceof ApiError) {

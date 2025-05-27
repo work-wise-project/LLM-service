@@ -1,7 +1,5 @@
 import { GenerativeModel, VertexAI } from '@google-cloud/vertexai';
 import { getConfig } from '../config';
-import { Transcript } from '../types';
-import { createGenerateContentRequest } from './prompt';
 
 const { googleCloudKey, googleProjectId } = getConfig();
 
@@ -17,10 +15,32 @@ export const getVertexAIClient = () => {
     }
 
     return {
-        analyzeInterview: async (transcript: Transcript[]) => {
-            const { response } = await model.generateContent(createGenerateContentRequest(transcript));
+        sendMessageToGPT: async ({
+            message,
+            jsonResponse = true,
+            systemInstruction,
+        }: {
+            message: string;
+            jsonResponse?: boolean;
+            systemInstruction?: string;
+        }) => {
+            const { response } = await model.generateContent({
+                contents: [
+                    {
+                        role: 'user',
+                        parts: [{ text: message }],
+                    },
+                ],
+                generationConfig: {
+                    temperature: 1,
+                    topP: 0.7,
+                    maxOutputTokens: 8192,
+                    responseMimeType: jsonResponse ? 'application/json' : 'text/plain',
+                },
+                systemInstruction,
+            });
 
-            return JSON.parse(response.candidates?.[0].content.parts[0].text || '');
+            return response.candidates?.[0].content.parts[0].text || '';
         },
     };
 };
