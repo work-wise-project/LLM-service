@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { getVertexAIClient } from '../vertexAI';
 import { prepareInterview } from '../controllers/interviewController';
 import { asyncHandler } from '../errors/asyncHandler';
+import prompts from '../vertexAI/prompts';
 
 export const createInterviewRouter = () => {
     const router = Router();
@@ -13,7 +14,12 @@ export const createInterviewRouter = () => {
             return;
         }
 
-        res.status(200).send({ analysis: await getVertexAIClient().analyzeInterview(transcript) });
+        res.status(200).send({
+            analysis: await getVertexAIClient().sendMessageToGPT({
+                message: JSON.stringify(transcript),
+                systemInstruction: prompts.SystemInstruction,
+            }),
+        });
     });
 
     router.post('/preparation', prepareInterview);
