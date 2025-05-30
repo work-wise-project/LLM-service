@@ -1,7 +1,6 @@
 import { Router } from 'express';
-import { getVertexAIClient } from '../vertexAI';
 import { prepareInterview } from '../controllers/interviewController';
-import { asyncHandler } from '../errors/asyncHandler';
+import { getVertexAIClient } from '../vertexAI';
 import prompts from '../vertexAI/prompts';
 
 export const createInterviewRouter = () => {
@@ -15,10 +14,12 @@ export const createInterviewRouter = () => {
         }
 
         res.status(200).send({
-            analysis: await getVertexAIClient().sendMessageToGPT({
-                message: JSON.stringify(transcript),
-                systemInstruction: prompts.SystemInstruction,
-            }),
+            analysis: JSON.parse(
+                await getVertexAIClient().sendMessageToGPT({
+                    message: JSON.stringify(transcript),
+                    systemInstruction: prompts.SystemInstruction,
+                })
+            ),
         });
     });
 
