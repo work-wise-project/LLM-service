@@ -7,17 +7,17 @@ export const createInterviewRouter = () => {
     const router = Router();
 
     router.post('/analysis', async (req, res) => {
-        const { transcript } = req.body;
-        if (!transcript) {
-            res.status(400).json({ error: 'transcript is required' });
+        const { transcript, skills, history } = req.body;
+        if (!transcript || !skills || !history) {
+            res.status(400).json({ error: 'transcript, skills, and history are required' });
             return;
         }
 
         res.status(200).send({
             analysis: JSON.parse(
                 await getVertexAIClient().sendMessageToGPT({
-                    message: JSON.stringify(transcript),
-                    systemInstruction: prompts.SystemInstruction,
+                    message: JSON.stringify({ transcript, skills, history }),
+                    systemInstruction: prompts.InterviewAnalysisSystemInstruction,
                 })
             ),
         });
