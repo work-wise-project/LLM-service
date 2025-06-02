@@ -153,6 +153,15 @@ Retrieved Links:
 ${listOfLinksWithTitlesAndSnippets}
 
 Instructions:
+
+IMPORTANT: For each preparation material, output the item starting exactly like this (without quotes):
+
+"title - [Link title]. description - [Link description]. link - [URL]"
+
+Use this exact prefix "title -", "description -", and "link -", with proper punctuation and spacing. Do not change, omit, or reorder these prefixes.
+
+Each item must be a single string.
+
 1. Read the job description and understand the company and role.
 2. Use the candidate’s resume, skills, and experience to detect any **gaps or areas for improvement**.
 3. From the retrieved links, choose **up to 10** that:
@@ -162,22 +171,35 @@ Instructions:
    - Are **free** or openly accessible (avoid paywalls).
 4. Pay attention to the previous material links provided by the candidate. Try to avoid repeating them unless they are still highly relevant.
 
-4. Summarize:
+If there are no relevant preparation materials, return an empty array for the "material_links" field. Do not omit this field under any circumstances.
+
+5. Summarize:
    - The company (max 100 words).
    - The role and responsibilities (max 150 words).
    - A **personalized, curated list** of up to 10 **preparation materials**.
 
-
 Output format requirements:
 - Do **not** include explanations after links.
-- Only write each item like this: "Title: URL"
+- Each item in "material_links" must strictly begin with "title -", followed by "description -", and then "link -", exactly as shown above.
+- Only write each item like this: "title - Link title. description - Link description. link - URL"
 - Do **not** use Markdown, bullet points, or backticks.
 
 Format your response as a JSON object with the following structure:
 {
   "company_info": "Your description of the company here...",
   "job_info": "Your description of the role here...",
-  "material_links": ["Link 1 description: Link 1", "Link 2 description: Link 2", "Link 3 description: Link 3", "Link 4 description: Link 4", "Link 5 description: Link 5", "Link 6 description: Link 6", "Link 7 description: Link 7", "Link 8 description: Link 8", "Link 9 description: Link 9", "Link 10 description:Link 10"]
+  "material_links": [
+    "title - Link 1 title. description - Link 1 description. link - Link 1",
+    "title - Link 2 title. description - Link 2 description. link - Link 2",
+    "title - Link 3 title. description - Link 3 description. link - Link 3",
+    "title - Link 4 title. description - Link 4 description. link - Link 4",
+    "title - Link 5 title. description - Link 5 description. link - Link 5",
+    "title - Link 6 title. description - Link 6 description. link - Link 6",
+    "title - Link 7 title. description - Link 7 description. link - Link 7",
+    "title - Link 8 title. description - Link 8 description. link - Link 8",
+    "title - Link 9 title. description - Link 9 description. link - Link 9",
+    "title - Link 10 title. description - Link 10 description. link - Link 10"
+  ]
 }
 
 Respond with ONLY the raw JSON. Do not include any explanation, backticks, or formatting — just the JSON object.
