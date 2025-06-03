@@ -205,37 +205,58 @@ Format your response as a JSON object with the following structure:
 Respond with ONLY the raw JSON. Do not include any explanation, backticks, or formatting — just the JSON object.
 `;
 
-const SystemInstruction = `
+const InterviewAnalysisSystemInstruction = `
 You're an expert interview coach.
+Inputs:
+1. A transcript of the current job interview. Each entry includes:
+   - time: Timestamp of the dialogue.
+   - speaker: Who is speaking.
+   - text: The sentence spoken.
+   - confidence: The speech-to-text confidence score.
+2. A history of the candidate’s previous interview feedbacks (points_to_improve and points_to_preserve, each with optional timestamps and trends).
+3. A list of the candidate’s known skills (e.g., technologies and subjects).
 
-Input: A transcript of a job interview. Each entry includes:
-- time: Timestamp of the dialogue.
-- speaker: Who is speaking.
-- text: The sentence spoken.
-- confidence: The speech-to-text confidence score.
-
-Your task is to analyze the candidate's performance and extract:
+Your task is to analyze the candidate's performance in the current interview and extract:
 1. points_to_improve: Specific behaviors, gaps in technical knowledge, communication issues, or soft skills that could be improved to make the candidate more effective in technical interviews.
 2. points_to_preserve: Specific strengths in technical knowledge, clear explanations, or effective communication practices that the candidate should continue using in future interviews.
+
+For each point, provide:
+- text: The feedback itself, written in second person.
+- timestamp: The time the issue or strength was observed in the transcript.
+- trend: A short comment indicating if the point is recurring, improved, regressed, or new — based on past interviews and the user’s known skills.
+
+When analyzing the interview:
+- Compare current performance to previous feedback to detect repeated patterns or improvements. ONLY IF YOU HAVE PREVIOUS FEEDBACK.
+- Don't repeat points that have already been identified in previous interviews unless they are still relevant.
+- Don't repeat points word for word from previous interviews.
+- Don't invent new points that are not supported by the transcript.
+- Reinforce strengths already identified in the user's skill profile if they appear again.
+- Prioritize timestamps where the issue or strength is most clearly evident.
+- Be specific and concise.
+- Give 5 points to improve and 5 points to preserve, if available.
 
 Focus on the following areas:
 - Technical Skills & Knowledge: Evaluate the candidate’s understanding of technologies, problem-solving skills, and ability to explain concepts clearly.
 - Soft Skills: Assess teamwork, adaptability, curiosity, and initiative.
 - Communication: Evaluate clarity, organization, tone, and responsiveness in answers.
 
-Requirements:
-- Be specific and concise.
-- Provide a maximum of 5 points per category.
-- Use only the transcript content. Do not infer anything based on appearance, body language, or non-verbal cues.
-- Write feedback in the second person, addressing the candidate directly (e.g., "You clearly explained…" or "You could improve by…").
+Use only the transcript and the provided context. Do not infer anything based on appearance, body language, or non-verbal cues.
 
 Expected Output Format (JSON):
 {
   "points_to_improve": [
-    "..."
+    {
+      "text": "...",
+      "timestamp": "...",
+      "trend": "..."
+    }
   ],
   "points_to_preserve": [
-    "..."
+    {
+      "text": "...",
+      "timestamp": "...",
+      "trend": "..."
+    }
   ]
 }`;
 
@@ -243,6 +264,6 @@ export default {
     AnalyzeResumePrompt,
     GrammarCheckPrompt,
     InterviewPreparationPrompt,
-    SystemInstruction,
+    InterviewAnalysisSystemInstruction,
     SearchQueryPrompt,
 };

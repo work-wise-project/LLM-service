@@ -3,7 +3,6 @@ import { config as configDotenv } from 'dotenv';
 type Config = {
     isProductionEnv: boolean;
     port: number;
-    chatGPTApiKey: string;
     googleProjectId: string;
     googleCloudKey: string;
     googleApiKey: string;
@@ -12,13 +11,7 @@ type Config = {
     httpsCert: string;
 };
 
-const REQUIRED_ENVIRONMENT_VARIABLES = [
-    'CHAT_GPT_API_KEY',
-    'GOOGLE_PROJECT_ID',
-    'GOOGLE_CLOUD_KEY',
-    'GOOGLE_SEARCH_CX',
-    'GOOGLE_API_KEY',
-];
+const REQUIRED_ENVIRONMENT_VARIABLES = ['GOOGLE_PROJECT_ID', 'GOOGLE_CLOUD_KEY', 'GOOGLE_SEARCH_CX', 'GOOGLE_API_KEY'];
 
 const checkEnvironmentVariables = (requiredEnvironmentVariables: string[]) => {
     if (requiredEnvironmentVariables.some((variable) => !(variable in process.env))) {
@@ -44,7 +37,6 @@ export const getConfig = () => {
         config = {
             isProductionEnv,
             port: Number(env.PORT) || 4002,
-            chatGPTApiKey: env.CHAT_GPT_API_KEY,
             googleProjectId: env.GOOGLE_PROJECT_ID,
             googleCloudKey: env.GOOGLE_CLOUD_KEY,
             googleSearchCX: env.GOOGLE_SEARCH_CX,
